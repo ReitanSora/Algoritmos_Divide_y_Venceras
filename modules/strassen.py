@@ -9,8 +9,6 @@
 
 
 import tkinter as tk
-import numpy as np
-import random
 from static import style
 from functions import events as event
 from functions import funcion_multiplicacion_matrices as algoritmo
@@ -24,37 +22,45 @@ class Strassen(tk.Frame):
         self.controller = controller
         self.init_widgets()
 
+    def mostrar_matriz(self, matriz_original):
+        matriz_modificada = []
+        for i in range(len(matriz_original)):
+            matriz_modificada.append([])
+            for j in range (len(matriz_original)):
+                matriz_modificada[i].append(matriz_original[i][j])
+
+        return matriz_modificada
+
     def calcular(self):
-        # generación aleatoria de las matrices
-        dimension = int(self.dimension.get())
+        self.container_frame.bind('<Configure>', lambda e: self.container.configure(
+            scrollregion=self.container.bbox(tk.ALL)))
+        try:
+            dimension = int(self.dimension.get())
 
-        matriz_1 = np.random.randint(1, 10, size=(dimension, dimension))
-        # print(matriz_1)
-        matriz_2 = np.random.randint(1, 10, size=(dimension, dimension))
-        # print(matriz_2)
+            matriz_a = algoritmo.generar_matrices(dimension)
+            matriz_b = algoritmo.generar_matrices(dimension)
+            resultado = algoritmo.strassen(matriz_a, matriz_b)
 
-        matriz_3 = []
-        for i in range(dimension):
-            matriz_3.append([])
-            for j in range(dimension):
-                matriz_3[i].append(random.randint(0, 10))
+            matriz_a_mostrar = self.mostrar_matriz(matriz_a)
+            matriz_b_mostrar = self.mostrar_matriz(matriz_b)
+            matriz_resultado_mostrar = self.mostrar_matriz(resultado)
+            self.texto_resultado.set("Matriz A\n\n{}\n\nMatriz B\n\n{}\n\nResultado\n\n{}".format(matriz_a_mostrar, matriz_b_mostrar,matriz_resultado_mostrar))
 
-        # print(matriz_3)
-
-        self.texto_resultado.set(
-            algoritmo.strassen_multiplicacion(matriz_1, matriz_2))
-        # print(type(algoritmo.strassen_multiplicacion(matriz_1, matriz_2)))
+        except ValueError:
+            self.texto_alerta_dimension.set("Ingrese un número entero")
 
         self.scroll.pack(side=tk.RIGHT, fill=tk.Y)
-        self.scroll_x.pack(side=tk.BOTTOM, fill=tk.X)
+        #self.scroll_x.pack(side=tk.BOTTOM, fill=tk.X)
+        self.container.configure(yscrollcommand=self.scroll.set)
+        #self.container.configure(xscrollcommand=self.scroll_x.set)
         self.container.bind('<Configure>', lambda e: self.container.configure(
             scrollregion=self.container.bbox(tk.ALL)))
 
     # función para verificar el dato ingresado por el usuario
     def verificacion(self):
-        # try:
+        try:
             if self.dimension.get() == "":
-                self.texto_alerta_dimension.set("Ingrese un valor correcto")
+                self.texto_alerta_dimension.set("Ingrese un valor")
             else:
                 if int(self.dimension.get()) > 120:
                     self.texto_alerta_dimension.set(
@@ -62,9 +68,9 @@ class Strassen(tk.Frame):
                 else:
                     self.texto_alerta_dimension.set("")
                     self.calcular()
-        # except ValueError:
-        #     self.texto_alerta_dimension.set(
-        #         "Ingrese un valor numérico correcto")
+        except ValueError:
+            self.texto_alerta_dimension.set(
+                "Ingrese un valor numérico correcto")
 
     def init_widgets(self):
         tk.Label(self,
@@ -88,10 +94,12 @@ class Strassen(tk.Frame):
         borde_entry_1.grid(row=0, column=1, pady=(20, 0))
 
         self.dimension = tk.StringVar()
-        tk.Entry(borde_entry_1,
+        dato = tk.Entry(borde_entry_1,
                  textvariable=self.dimension,
                  **style.STYLE_ENTRY,
-                 ).pack(side=tk.TOP, expand=True)
+                 )
+        dato.pack(side=tk.TOP, expand=True)
+        dato.focus_set()
 
         canvas_linea_1 = tk.Canvas(
             borde_entry_1, **style.STYLE_CANVAS, width=200)
@@ -125,16 +133,20 @@ class Strassen(tk.Frame):
         self.container.pack(side=tk.LEFT, fill=tk.BOTH,
                             expand=True, padx=20, pady=20)
 
-        container_frame = tk.Frame(self.container, background=style.BG)
-        container_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True, padx=20)
+        self.container_frame = tk.Frame(self.container, background=style.BG)
+        self.container_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True, padx=20)
 
-        self.container.create_window((0, 0), window=container_frame)
+        self.container.create_window((0, 0), window=self.container_frame)
 
         self.texto_resultado = tk.StringVar()
-        tk.Label(container_frame,
+        resultado = tk.Label(self.container_frame,
                  textvariable=self.texto_resultado,
                  **style.STYLE_TEXT,
-                 ).pack(side=tk.TOP, fill=tk.BOTH, expand=True, padx=10)
+                 )
+        resultado.pack(side=tk.TOP, fill=tk.BOTH, expand=True, padx=10)
+
+        resultado.configure(wraplength="550p")
+        
 
         self.scroll = tk.Scrollbar(self,
                                    border=0,
@@ -142,11 +154,10 @@ class Strassen(tk.Frame):
                                    command=self.container.yview,
                                    )
 
-        self.scroll_x = tk.Scrollbar(container_frame,
-                                     border=0,
-                                     orient="horizontal",
-                                     command=self.container.xview,
-                                     )
+        # self.scroll_x = tk.Scrollbar(self,
+        #                              border=0,
+        #                              orient="horizontal",
+        #                              command=self.container.xview,
+        #                              )
 
-        self.container.configure(yscrollcommand=self.scroll.set)
-        self.container.configure(xscrollcommand=self.scroll_x.set)
+        
