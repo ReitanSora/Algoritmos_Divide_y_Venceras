@@ -22,6 +22,7 @@ class Strassen(tk.Frame):
         self.controller = controller
         self.init_widgets()
 
+    #función para crear una matriz que se pueda mostrar de forma completa
     def mostrar_matriz(self, matriz_original):
         matriz_modificada = []
         for i in range(len(matriz_original)):
@@ -31,6 +32,7 @@ class Strassen(tk.Frame):
 
         return matriz_modificada
 
+    #función para calcular la multiplicación de matrices
     def calcular(self):
         self.container_frame.bind('<Configure>', lambda e: self.container.configure(
             scrollregion=self.container.bbox(tk.ALL)))
@@ -41,18 +43,19 @@ class Strassen(tk.Frame):
             matriz_b = algoritmo.generar_matrices(dimension)
             resultado = algoritmo.strassen(matriz_a, matriz_b)
 
-            matriz_a_mostrar = self.mostrar_matriz(matriz_a)
-            matriz_b_mostrar = self.mostrar_matriz(matriz_b)
-            matriz_resultado_mostrar = self.mostrar_matriz(resultado)
-            self.texto_resultado.set("Matriz A\n\n{}\n\nMatriz B\n\n{}\n\nResultado\n\n{}".format(matriz_a_mostrar, matriz_b_mostrar,matriz_resultado_mostrar))
+            if dimension < 100:
+                matriz_a_mostrar = self.mostrar_matriz(matriz_a)
+                matriz_b_mostrar = self.mostrar_matriz(matriz_b)
+                matriz_resultado_mostrar = self.mostrar_matriz(resultado)
+                self.texto_resultado.set("Matriz A\n\n{}\n\nMatriz B\n\n{}\n\nResultado\n\n{}".format(matriz_a_mostrar, matriz_b_mostrar,matriz_resultado_mostrar))
+            else:
+                self.texto_resultado.set("Matriz A\n\n{}\n\nMatriz B\n\n{}\n\nResultado\n\n{}".format(matriz_a, matriz_b,resultado))
 
         except ValueError:
             self.texto_alerta_dimension.set("Ingrese un número entero")
 
         self.scroll.pack(side=tk.RIGHT, fill=tk.Y)
-        #self.scroll_x.pack(side=tk.BOTTOM, fill=tk.X)
         self.container.configure(yscrollcommand=self.scroll.set)
-        #self.container.configure(xscrollcommand=self.scroll_x.set)
         self.container.bind('<Configure>', lambda e: self.container.configure(
             scrollregion=self.container.bbox(tk.ALL)))
 
@@ -62,16 +65,13 @@ class Strassen(tk.Frame):
             if self.dimension.get() == "":
                 self.texto_alerta_dimension.set("Ingrese un valor")
             else:
-                if int(self.dimension.get()) > 120:
-                    self.texto_alerta_dimension.set(
-                        "Ingrese un valor menor o igual a 120")
-                else:
-                    self.texto_alerta_dimension.set("")
-                    self.calcular()
+                self.texto_alerta_dimension.set("")
+                self.calcular()
         except ValueError:
             self.texto_alerta_dimension.set(
                 "Ingrese un valor numérico correcto")
 
+    #función para inicializar los widgets que se muestra en la ventana
     def init_widgets(self):
         tk.Label(self,
                  text="Multiplicación de matrices",
@@ -153,11 +153,3 @@ class Strassen(tk.Frame):
                                    orient="vertical",
                                    command=self.container.yview,
                                    )
-
-        # self.scroll_x = tk.Scrollbar(self,
-        #                              border=0,
-        #                              orient="horizontal",
-        #                              command=self.container.xview,
-        #                              )
-
-        

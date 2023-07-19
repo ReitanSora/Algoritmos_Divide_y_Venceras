@@ -23,7 +23,7 @@ class Manager(tk.Tk):
         super().__init__(*args, **kwargs)
         self.title("Técnicas de Diseño de algoritmos - Divide y Vencerás")
         self.geometry("1000x600")
-        #self.resizable(False, False)
+        self.resizable(False, False)
 
         # contenedor para los botones de navegacion
         Navegacion(self)
@@ -61,9 +61,7 @@ class Manager(tk.Tk):
         # para poner una pantalla encima de la otra
         frame.tkraise()
 
-    def salir(self):
-        self.destroy()
-
+    # funciones para la navegación entre algoritmos
     def move_to_home(self):
         self.show_frame(Home)
 

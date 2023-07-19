@@ -9,6 +9,7 @@
 
 from modules.manager import Manager
 
+#condicion para que el archivo solo se ejecute desde este archivo
 if __name__=="__main__":
     app = Manager()
     app.mainloop()

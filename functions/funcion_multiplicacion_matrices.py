@@ -11,16 +11,12 @@ import numpy as np
 
 
 def _pad(M, size):
-    """Add zeros to turn matrix M into a squre matrix of shape (size, size).
-    """
     M_pad = np.zeros((size, size))
     M_pad[: M.shape[0], : M.shape[1]] = M
     return M_pad
 
 
 def _partition(M):
-    """Evenly partition a matrix into 4 blocks (2-by-2).
-    """
     block_size = M.shape[0] // 2
     M_11 = M[: block_size, : block_size]
     M_12 = M[: block_size, block_size:]
@@ -30,8 +26,6 @@ def _partition(M):
 
 
 def _mat_mul_2x2(M, N):
-    """Multiply two 2-by-2 matrices.
-    """
     return np.array([[M[0][0] * N[0][0] + M[0][1] * N[1][0],
                       M[0][0] * N[0][1] + M[0][1] * N[1][1]],
                      [M[1][0] * N[0][0] + M[1][1] * N[1][0],
@@ -39,8 +33,6 @@ def _mat_mul_2x2(M, N):
 
 
 def _iterate(A, B):
-    """The iterate process of the Strassen algorithm.
-    """
     if A.shape[0] == A.shape[1] == B.shape[0] == B.shape[1] == 2:
         return _mat_mul_2x2(A, B)
 
@@ -66,10 +58,8 @@ def _iterate(A, B):
 
 
 def strassen(X, Y):
-    """The user interface of the Strassen algorithm.
-    """
     if X.shape[1] != Y.shape[0]:
-        raise Exception("Inconsistent shape for Strassen Algorithm")
+        pass
     max_size = max(np.amax(X.shape), np.amax(Y.shape))
     if max_size == 0:
         return np.array([[]])

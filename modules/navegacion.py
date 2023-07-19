@@ -19,6 +19,7 @@ class Navegacion (tk.Frame):
         self.controller = parent
         self.init_widgets(parent)
 
+    # función para colorear un botón y dar feedback al usuario sabiendo donde se encuentra
     def colorear_boton(self):
         if self.ubicacion.get() == 1:
             self.boton_inicio.configure(background=style.COLOR_MAGENTA_NORMAL,)
@@ -49,6 +50,7 @@ class Navegacion (tk.Frame):
                 background=style.COLOR_MAGENTA_CLARO)
             self.deshabilitar_eventos()
 
+    # fcunción para cambiar los eventos .bind de los botones del menú
     def deshabilitar_eventos(self):
         if self.ubicacion.get() == 1:
             self.boton_inicio.bind('<Leave>', event.on_enter_nav)
@@ -71,6 +73,7 @@ class Navegacion (tk.Frame):
             self.boton_pi.bind('<Leave>', event.on_leave_nav)
             self.boton_karatsuba.bind('<Leave>', event.on_leave_nav)
 
+    # funciones de navegación
     def home(self):
         self.controller.move_to_home()
         self.ubicacion.set(value=1)
@@ -91,6 +94,7 @@ class Navegacion (tk.Frame):
         self.ubicacion.set(value=4)
         self.colorear_boton()
 
+    # función para inicializar los widges que se mostrarán en el menú
     def init_widgets(self, parent):
         nav_frame = tk.Frame(parent)
         nav_frame.pack(side=tk.LEFT, fill=tk.Y)

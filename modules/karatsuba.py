@@ -21,6 +21,7 @@ class Karatsuba(tk.Frame):
         self.controller = controller
         self.init_widgets()
 
+    # función para calcular la multiplicación
     def calcular(self):
         # longitud de los numeros ingresados
         longitud = max(len(self.multiplicando.get()),

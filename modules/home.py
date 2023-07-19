@@ -19,6 +19,7 @@ class Home(tk.Frame):
         self.controller = controller
         self.init_widgets()
 
+    #función para inicializar los widges que se mostrarán en la ventana
     def init_widgets(self):
 
         # label titulo bienvenida

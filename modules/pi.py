@@ -21,6 +21,7 @@ class Pi(tk.Frame):
         self.controller = controller
         self.init_widgets()
 
+    #función para calcular los decimales dependiendo de nuestra variable
     def calcular(self):
         self.container_frame.bind('<Configure>', lambda e: self.container.configure(
             scrollregion=self.container.bbox(tk.ALL)))
@@ -30,7 +31,8 @@ class Pi(tk.Frame):
         self.container.configure(yscrollcommand=self.scroll.set)
         self.container.bind('<Configure>', lambda e: self.container.configure(
             scrollregion=self.container.bbox(tk.ALL)))
-        
+
+    #función para inicializar los widges que se mostrarán en la ventana  
     def init_widgets(self):
 
         tk.Label(self,
